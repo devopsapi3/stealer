@@ -11,5 +11,5 @@ g++ -o <programname> -pthread stealer.cpp sqlite3.o -ldl -std=c++1z
 And for Windows using:
 ```
 gcc -c sqlite3.c
-g++ -o <programname> stealer.cpp sqlite3.o
+g++ -o <programname> stealer.cpp sqlite3.o -std=c++1z
 ```
