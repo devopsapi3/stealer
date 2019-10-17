@@ -59,6 +59,14 @@ int main()
 
             std::stringstream pass;
             
+            int rc = sqlite3_open(chrome_db_path.c_str(), &db);
+
+            if( rc )
+            {
+                std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
+                sqlite3_close(db);
+                return 1;
+            }
             pass = get_chrome_pass(db);
             std::cout << pass.str();
 

