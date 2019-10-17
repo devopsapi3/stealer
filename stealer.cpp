@@ -13,10 +13,7 @@
 
 #ifdef _WIN32
     #include "windows/tools.h"
-    #include <windows.h>
-    #include <Wincrypt.h>
-    #include <tchar.h>
-
+    
     #ifndef UNICODE  
         typedef std::string String; 
     #else
