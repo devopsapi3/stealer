@@ -59,8 +59,10 @@ int main()
         if( fs::exists(chrome_db_path))
         {
             std::cout << "ch exists" << std::endl;
+
+            std::stringstream pass;
             
-            pass = get_pass(db);
+            pass = get_chrome_pass(db);
             std::cout << pass.str();
 
             //rc = sqlite3_exec(db, sql.c_str(), callback1, 0, &zErrMsg);

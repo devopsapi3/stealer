@@ -4,7 +4,7 @@ std::stringstream get_pass(sqlite3* db)
 {
     int rc;
     rc = sqlite3_open(chrome_db_path.c_str(), &db);
-    std::stringstream pass;
+
     if( rc )
     {
         std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
