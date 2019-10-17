@@ -10,6 +10,7 @@
 #include <sstream>
 #include "sqlite3.h"
 
+
 #ifdef _WIN32
     #include <windows.h>
     #include <wchar.h>
