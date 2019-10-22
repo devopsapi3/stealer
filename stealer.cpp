@@ -116,8 +116,8 @@ int main()
         }
         
 
-        Sender bot_sender(bot); // chat_id is in format "@your_name"
-        bot_sender.send("Hello");
+        Sender bot_sender(bot);
+        bot_sender.send("@chat_id", "Hello"); // chat_id is in format "@your_name"
     }
     catch(std::exception &e)
     {
