@@ -9,6 +9,6 @@
 #include "../sqlite3.h"
 
 std::stringstream get_chrome_pass(sqlite3* db);
-int callback1(void *NotUsed, int argc, char **argv, char **azColName);
+int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 #endif
