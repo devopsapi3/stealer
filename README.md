@@ -1,5 +1,7 @@
 # stealer
 
+Software is being developed yet!
+
 Password stealer for Google Chrome and Mozilla Firefox written in C++.
 It sends stolen links, logins and passwords to Telegram channel with bot you set. 
 
