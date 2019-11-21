@@ -8,7 +8,7 @@ class Sender
 {
 public:
     Sender(const TgBot::Bot &bot_);
-    void send(const std::string &chat_id, const std::string &message);
+    void send(const long &chat_id, const std::string &message);
 
 private:
     TgBot::Bot bot;
