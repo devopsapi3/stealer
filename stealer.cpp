@@ -88,40 +88,11 @@ int main()
         std::string token("your_token");
 
         TgBot::Bot bot(token);
-        bot.getEvents().onCommand("start", [&bot](TgBot::Message::Ptr message)
-        {
-            bot.getApi().sendMessage(message->chat->id, "Hi!");
-        });
-    
-        bot.getEvents().onAnyMessage([&bot](TgBot::Message::Ptr message)
-        {
-            printf("User wrote %s\n", message->text.c_str());
-        if (StringTools::startsWith(message->text, "/start"))
-            {
-                return;
-            }
-            bot.getApi().sendMessage(message->chat->id, "Your message is: " + message->text);
-        });
-    
-        signal(SIGINT, [](int s) 
-        {
-            printf("SIGINT got\n");
-            exit(0);
-        });
 
-        printf("Bot username: %s\n", bot.getApi().getMe()->username.c_str());
-        bot.getApi().deleteWebhook();
-
-        TgBot::TgLongPoll longPoll(bot);
-        while (true) 
-        {
-            printf("Long poll started\n");
-            longPoll.start();
-        }
         
 
-        Sender bot_sender(bot);
-        bot_sender.send("@chat_id", "Hello"); // chat_id is in format "@your_name"
+        //Sender bot_sender(bot);
+        //bot_sender.send("@chat_id", "Hello"); // chat_id is in format "@your_name"
     }
     catch(std::exception &e)
     {
